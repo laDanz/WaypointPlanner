@@ -104,7 +104,6 @@ let graph = {
             "id": "e0",
             "source": "n0",
             "target": "n1",
-            "laenge": 2.5,
             "additional": [
                 [52.61142156692721, 13.251644355710749],
                 [52.60418972118463, 13.270698481397998]
@@ -114,7 +113,6 @@ let graph = {
             "id": "e1",
             "source": "n1",
             "target": "n2",
-            "laenge": 1.5,
             "additional": [
                 [52.59607986779725, 13.266656697586342],
                 [52.591081697087525, 13.256660499950485]
@@ -124,7 +122,6 @@ let graph = {
             "id": "e2",
             "source": "n2",
             "target": "n0",
-            "laenge": 0.5,
             "additional": [
                 [52.591227752416934, 13.245135949828509],
                 [52.599869424163046, 13.251959489231254],
@@ -135,24 +132,20 @@ let graph = {
             "id": "e3",
             "source": "n2",
             "target": "n3",
-            "laenge": 3
         },
         {
             "id": "e4",
             "source": "n0",
-            "target": "n4",
-            "laenge": 5
+            "target": "n4"
         },
         {
             "id": "e5",
             "source": "n3",
-            "target": "n4",
-            "laenge": 2
+            "target": "n4"
         }, {
             "id": "e6",
             "source": "n4",
-            "target": "n5",
-            "laenge": 7
+            "target": "n5"
         }, {
             "id": "e7",
             "source": "n0",
@@ -206,6 +199,22 @@ let graph = {
     ]
 };
 
+function calcDistance(p1, p2, additional = []) {
+    let result = 0;
+    let points = [];
+    points = points.concat(additional);
+    points.push(p2);
+    let o = p1;
+
+    points.forEach(function(n) {
+        let dx = 71.5 * (o[1] - n[1]);
+        let dy = 111.3 * (o[0] - n[0])
+        result += Math.sqrt(dx * dx + dy * dy);
+        o = n;
+    });
+    return result;
+}
+
 // initialize map
 var map = L.map('map').setView([52.60681, 13.24372], 12);
 
@@ -220,9 +229,24 @@ info.onAdd = function(map) {
     return this._div;
 };
 // method that we will use to update the control based on feature properties passed
-info.update = function(laenge) {
+info.update = function(laenge, route = [], homeWaypoint = {}) {
+    let routeList = '';
+    let n = homeWaypoint;
+    route.forEach(function(eid) {
+        let edge = edges[eid];
+        if (edge.source == n.id) {
+            n = nodes[edge.target];
+        } else {
+            n = nodes[edge.source];
+        }
+        routeList += '<li>' + n.label + '</li>';
+    });
     this._div.innerHTML = '<h4>Route Details</h4>' +
-        '<span>' + (laenge ? laenge : 0) + ' km</span>';
+        '<span>' + (laenge ? laenge.toFixed(2) : 0) + ' km</span>' +
+        '<ul>' +
+        '<li>' + homeWaypoint.label + '</li>' +
+        routeList +
+        '</ul>';
 };
 
 info.addTo(map);
@@ -244,6 +268,9 @@ var edges = {};
 graph["edges"].forEach(function(e) {
     // TODO fail if multiple id
     edges[e.id] = e;
+    if (!e.laenge) {
+        e.laenge = calcDistance(nodes[e.source].p, nodes[e.target].p, e.additional);
+    }
     if (!nodes[e.source].edges) {
         nodes[e.source].edges = {};
     }
@@ -319,7 +346,7 @@ function onNodeClick(marker) {
         route.forEach(function(eid) {
             laenge += edges[eid].laenge;
         });
-        info.update(laenge);
+        info.update(laenge, route, homeWaypoint);
     }
 }
 // adding to map, aka Painting
