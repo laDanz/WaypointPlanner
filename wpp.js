@@ -77,189 +77,189 @@ var candidateIcon = new leaflet_1.Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
-var n0 = new WppNode("n0", "zu Hause", new leaflet_1.LatLng(52.60715024055473, 13.24389570647589), { icon: homeIcon });
-var n1 = new WppNode("n1", "Alter Fritz", new leaflet_1.LatLng(52.598020036292006, 13.275033744733333));
-var n2 = new WppNode("n2", "Reiherwerder", new leaflet_1.LatLng(52.585575211205594, 13.253645901761473));
-var n3 = new WppNode("n3", "Fähre Konradshöhe", new leaflet_1.LatLng(52.57320458462619, 13.22502041285229));
-var n4 = new WppNode("n4", "Badestelle Sandhauser Str", new leaflet_1.LatLng(52.59452182279868, 13.221125258922724));
-var n5 = new WppNode("n5", "Kirschstand", new leaflet_1.LatLng(52.62762653026662, 13.226065992768778));
-var n6 = new WppNode("n6", "Ortseingang Frohnau", new leaflet_1.LatLng(52.62602429973217, 13.267603445130307));
-var n7 = new WppNode("n7", "Kreisel Hennigsdorf", new leaflet_1.LatLng(52.63622075215098, 13.21915130716572));
-var n8 = new WppNode("n8", "Havelbaude", new leaflet_1.LatLng(52.68278315646737, 13.245812737843977));
-var n9 = new WppNode("n9", "Stolpe", new leaflet_1.LatLng(52.66068782799154, 13.2592675524601));
-var n10 = new WppNode("n10", "Landhaus Hubertus", new leaflet_1.LatLng(52.65503916600213, 13.283747538747559));
-var n11 = new WppNode("n11", "Jagdhaus Spandau", new leaflet_1.LatLng(52.5854557546454, 13.21137100433072));
+var n0 = new WppNode("n0", "zu Hause", new leaflet_1.LatLng(52.60715, 13.24389), { icon: homeIcon });
+var n1 = new WppNode("n1", "Alter Fritz", new leaflet_1.LatLng(52.59802, 13.27503));
+var n2 = new WppNode("n2", "Reiherwerder", new leaflet_1.LatLng(52.58557, 13.25364));
+var n3 = new WppNode("n3", "Fähre Konradshöhe", new leaflet_1.LatLng(52.57320, 13.22502));
+var n4 = new WppNode("n4", "Badestelle Sandhauser Str", new leaflet_1.LatLng(52.59452, 13.22112));
+var n5 = new WppNode("n5", "Kirschstand", new leaflet_1.LatLng(52.62762, 13.22606));
+var n6 = new WppNode("n6", "Ortseingang Frohnau", new leaflet_1.LatLng(52.62602, 13.26760));
+var n7 = new WppNode("n7", "Kreisel Hennigsdorf", new leaflet_1.LatLng(52.63622, 13.21915));
+var n8 = new WppNode("n8", "Havelbaude", new leaflet_1.LatLng(52.68278, 13.24581));
+var n9 = new WppNode("n9", "Stolpe", new leaflet_1.LatLng(52.66068, 13.25926));
+var n10 = new WppNode("n10", "Landhaus Hubertus", new leaflet_1.LatLng(52.65503, 13.28374));
+var n11 = new WppNode("n11", "Jagdhaus Spandau", new leaflet_1.LatLng(52.58545, 13.21137));
 var graph = {
     "nodes": [n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11],
     "edges": [
         new WppEdge("e0", n0, n1, [
-            new leaflet_1.LatLng(52.61142156692721, 13.251644355710749),
-            new leaflet_1.LatLng(52.60418972118463, 13.270698481397998)
+            new leaflet_1.LatLng(52.61142, 13.25164),
+            new leaflet_1.LatLng(52.60418, 13.27069)
         ]),
         new WppEdge("e1", n1, n2, [
-            new leaflet_1.LatLng(52.59607986779725, 13.266656697586342),
-            new leaflet_1.LatLng(52.591081697087525, 13.256660499950485)
+            new leaflet_1.LatLng(52.59607, 13.26665),
+            new leaflet_1.LatLng(52.59108, 13.25666)
         ]),
         new WppEdge("e2", n2, n0, [
-            new leaflet_1.LatLng(52.591227752416934, 13.245135949828509),
-            new leaflet_1.LatLng(52.599869424163046, 13.251959489231254),
-            new leaflet_1.LatLng(52.60102933789351, 13.246916936719348)
+            new leaflet_1.LatLng(52.59122, 13.24513),
+            new leaflet_1.LatLng(52.59986, 13.25195),
+            new leaflet_1.LatLng(52.60102, 13.24691)
         ]),
         new WppEdge("e3", n2, n3, [
-            new leaflet_1.LatLng(52.58418622103453, 13.252730369567873),
-            new leaflet_1.LatLng(52.58284333014117, 13.248846530914308),
-            new leaflet_1.LatLng(52.57884048894273, 13.2440185546875),
-            new leaflet_1.LatLng(52.5766237746851, 13.24382543563843),
-            new leaflet_1.LatLng(52.57471991885766, 13.240950107574465),
-            new leaflet_1.LatLng(52.57316808480483, 13.23309659957886)
+            new leaflet_1.LatLng(52.58418, 13.25273),
+            new leaflet_1.LatLng(52.58284, 13.24884),
+            new leaflet_1.LatLng(52.57884, 13.24401),
+            new leaflet_1.LatLng(52.57662, 13.24382),
+            new leaflet_1.LatLng(52.57471, 13.24095),
+            new leaflet_1.LatLng(52.57316, 13.23309)
         ]),
         new WppEdge("e4", n0, n4, [
-            new leaflet_1.LatLng(52.607830003740006, 13.239920139312744),
-            new leaflet_1.LatLng(52.60273476545375, 13.238611221313477),
-            new leaflet_1.LatLng(52.60253276808935, 13.238761425018312),
-            new leaflet_1.LatLng(52.5991833856945, 13.236690759658813),
-            new leaflet_1.LatLng(52.59853172511889, 13.23581099510193),
-            new leaflet_1.LatLng(52.596420278268944, 13.235725164413454),
-            new leaflet_1.LatLng(52.59605532652377, 13.230392932891847),
-            new leaflet_1.LatLng(52.59647241398439, 13.227925300598145),
-            new leaflet_1.LatLng(52.59625735375833, 13.22508215904236),
-            new leaflet_1.LatLng(52.5963225236353, 13.219267129898073)
+            new leaflet_1.LatLng(52.60783, 13.23992),
+            new leaflet_1.LatLng(52.60273, 13.23861),
+            new leaflet_1.LatLng(52.60253, 13.23876),
+            new leaflet_1.LatLng(52.59918, 13.23669),
+            new leaflet_1.LatLng(52.59853, 13.23581),
+            new leaflet_1.LatLng(52.59642, 13.23572),
+            new leaflet_1.LatLng(52.59605, 13.23039),
+            new leaflet_1.LatLng(52.59647, 13.22792),
+            new leaflet_1.LatLng(52.59625, 13.22508),
+            new leaflet_1.LatLng(52.59632, 13.21926)
         ]),
         new WppEdge("e5", n4, n3, [
-            new leaflet_1.LatLng(52.592672861237155, 13.223161697387697),
-            new leaflet_1.LatLng(52.59048291787224, 13.221960067749025),
-            new leaflet_1.LatLng(52.585920184335905, 13.22028636932373),
-            new leaflet_1.LatLng(52.58240003673654, 13.220071792602539),
-            new leaflet_1.LatLng(52.57974018216329, 13.219771385192873),
-            new leaflet_1.LatLng(52.57726272146827, 13.220157623291016),
-            new leaflet_1.LatLng(52.57551537552513, 13.222904205322266),
-            new leaflet_1.LatLng(52.57361147156712, 13.225865364074709)
+            new leaflet_1.LatLng(52.59267, 13.22316),
+            new leaflet_1.LatLng(52.59048, 13.22196),
+            new leaflet_1.LatLng(52.58592, 13.22028),
+            new leaflet_1.LatLng(52.58240, 13.22007),
+            new leaflet_1.LatLng(52.57974, 13.21977),
+            new leaflet_1.LatLng(52.57726, 13.22015),
+            new leaflet_1.LatLng(52.57551, 13.22290),
+            new leaflet_1.LatLng(52.57361, 13.22586)
         ]),
         new WppEdge("e6", n4, n5, [
-            new leaflet_1.LatLng(52.596296455696155, 13.219256401062013),
-            new leaflet_1.LatLng(52.60156186453252, 13.210330009460451),
-            new leaflet_1.LatLng(52.60565384916619, 13.209686279296875),
-            new leaflet_1.LatLng(52.610553302332164, 13.215222358703615),
-            new leaflet_1.LatLng(52.61141325617663, 13.217582702636719),
-            new leaflet_1.LatLng(52.61274224253604, 13.222603797912598),
-            new leaflet_1.LatLng(52.613295974947626, 13.222657442092897),
-            new leaflet_1.LatLng(52.61371289825971, 13.22335481643677),
-            new leaflet_1.LatLng(52.61444901878977, 13.223901987075807),
-            new leaflet_1.LatLng(52.61590168051569, 13.22111248970032),
-            new leaflet_1.LatLng(52.622017965034026, 13.22533965110779),
-            new leaflet_1.LatLng(52.62169230582232, 13.227807283401491),
-            new leaflet_1.LatLng(52.623522479137556, 13.228000402450563),
-            new leaflet_1.LatLng(52.6249683270768, 13.226873874664307),
-            new leaflet_1.LatLng(52.62511811940303, 13.22631597518921),
-            new leaflet_1.LatLng(52.62647273976646, 13.227517604827883)
+            new leaflet_1.LatLng(52.59629, 13.21925),
+            new leaflet_1.LatLng(52.60156, 13.21033),
+            new leaflet_1.LatLng(52.60565, 13.20968),
+            new leaflet_1.LatLng(52.61055, 13.21522),
+            new leaflet_1.LatLng(52.61141, 13.21758),
+            new leaflet_1.LatLng(52.61274, 13.22260),
+            new leaflet_1.LatLng(52.61329, 13.22265),
+            new leaflet_1.LatLng(52.61371, 13.22335),
+            new leaflet_1.LatLng(52.61444, 13.22390),
+            new leaflet_1.LatLng(52.61590, 13.22111),
+            new leaflet_1.LatLng(52.62201, 13.22533),
+            new leaflet_1.LatLng(52.62169, 13.22780),
+            new leaflet_1.LatLng(52.62352, 13.22800),
+            new leaflet_1.LatLng(52.62496, 13.22687),
+            new leaflet_1.LatLng(52.62511, 13.22631),
+            new leaflet_1.LatLng(52.62647, 13.22751)
         ]),
         new WppEdge("e7", n0, n5, [
-            new leaflet_1.LatLng(52.60940667093514, 13.230714797973633),
-            new leaflet_1.LatLng(52.610540272598584, 13.231015205383303),
-            new leaflet_1.LatLng(52.61181716806234, 13.222496509552004),
-            new leaflet_1.LatLng(52.613295974947626, 13.222657442092897),
-            new leaflet_1.LatLng(52.61371289825971, 13.22335481643677),
-            new leaflet_1.LatLng(52.61444901878977, 13.223901987075807),
-            new leaflet_1.LatLng(52.61590168051569, 13.22111248970032),
-            new leaflet_1.LatLng(52.622017965034026, 13.22533965110779),
-            new leaflet_1.LatLng(52.62169230582232, 13.227807283401491),
-            new leaflet_1.LatLng(52.623522479137556, 13.228000402450563),
-            new leaflet_1.LatLng(52.6249683270768, 13.226873874664307),
-            new leaflet_1.LatLng(52.62511811940303, 13.22631597518921),
-            new leaflet_1.LatLng(52.62647273976646, 13.227517604827883)
+            new leaflet_1.LatLng(52.60940, 13.23071),
+            new leaflet_1.LatLng(52.61054, 13.23101),
+            new leaflet_1.LatLng(52.61181, 13.22249),
+            new leaflet_1.LatLng(52.61329, 13.22265),
+            new leaflet_1.LatLng(52.61371, 13.22335),
+            new leaflet_1.LatLng(52.61444, 13.22390),
+            new leaflet_1.LatLng(52.61590, 13.22111),
+            new leaflet_1.LatLng(52.62201, 13.22533),
+            new leaflet_1.LatLng(52.62169, 13.22780),
+            new leaflet_1.LatLng(52.62352, 13.22800),
+            new leaflet_1.LatLng(52.62496, 13.22687),
+            new leaflet_1.LatLng(52.62511, 13.22631),
+            new leaflet_1.LatLng(52.62647, 13.22751)
         ]),
         new WppEdge("e8", n0, n6, [
-            new leaflet_1.LatLng(52.61149143296143, 13.25174331665039),
-            new leaflet_1.LatLng(52.611830197415955, 13.252644538879396),
-            new leaflet_1.LatLng(52.61112660677165, 13.255219459533693),
-            new leaflet_1.LatLng(52.61146537404868, 13.25779438018799),
-            new leaflet_1.LatLng(52.61110054764178, 13.263673782348635),
-            new leaflet_1.LatLng(52.614983187000604, 13.264832496643068),
-            new leaflet_1.LatLng(52.618240169216094, 13.264617919921877),
-            new leaflet_1.LatLng(52.62170533223731, 13.26727867126465),
-            new leaflet_1.LatLng(52.62292979793696, 13.26805114746094)
+            new leaflet_1.LatLng(52.61149, 13.25174),
+            new leaflet_1.LatLng(52.61183, 13.25264),
+            new leaflet_1.LatLng(52.61112, 13.25521),
+            new leaflet_1.LatLng(52.61146, 13.25779),
+            new leaflet_1.LatLng(52.61110, 13.26367),
+            new leaflet_1.LatLng(52.61498, 13.26483),
+            new leaflet_1.LatLng(52.61824, 13.26461),
+            new leaflet_1.LatLng(52.62170, 13.26727),
+            new leaflet_1.LatLng(52.62292, 13.26805)
         ]),
         new WppEdge("e9", n5, n6, [
-            new leaflet_1.LatLng(52.62811385826731, 13.241658210754396),
-            new leaflet_1.LatLng(52.628739030079636, 13.244447708129885),
-            new leaflet_1.LatLng(52.62819200523228, 13.248910903930666),
-            new leaflet_1.LatLng(52.62866088409151, 13.263416290283205),
-            new leaflet_1.LatLng(52.62678533851139, 13.264102935791017)
+            new leaflet_1.LatLng(52.62811, 13.24165),
+            new leaflet_1.LatLng(52.62873, 13.24444),
+            new leaflet_1.LatLng(52.62819, 13.24891),
+            new leaflet_1.LatLng(52.62866, 13.26341),
+            new leaflet_1.LatLng(52.62678, 13.26410)
         ]),
         new WppEdge("e10", n5, n7),
         new WppEdge("e11", n7, n9, [
-            new leaflet_1.LatLng(52.63639665997182, 13.219664096832277),
-            new leaflet_1.LatLng(52.64182651385156, 13.224191665649416),
-            new leaflet_1.LatLng(52.64346705653171, 13.227045536041262)
+            new leaflet_1.LatLng(52.63639, 13.21966),
+            new leaflet_1.LatLng(52.64182, 13.22419),
+            new leaflet_1.LatLng(52.64346, 13.22704)
         ]),
         new WppEdge("e12", n7, n8, [
-            new leaflet_1.LatLng(52.63639665997182, 13.219664096832277),
-            new leaflet_1.LatLng(52.64182651385156, 13.224191665649416),
-            new leaflet_1.LatLng(52.64346705653171, 13.227045536041262),
-            new leaflet_1.LatLng(52.643974831081145, 13.225457668304445),
-            new leaflet_1.LatLng(52.648375296904675, 13.227560520172121),
-            new leaflet_1.LatLng(52.65480595049276, 13.221251964569092),
-            new leaflet_1.LatLng(52.65684950267099, 13.221466541290283),
-            new leaflet_1.LatLng(52.65692759831141, 13.223655223846437),
-            new leaflet_1.LatLng(52.660207489229755, 13.224513530731203),
-            new leaflet_1.LatLng(52.66516590462891, 13.232367038726808),
-            new leaflet_1.LatLng(52.66838011485643, 13.237988948822023),
-            new leaflet_1.LatLng(52.67215358222824, 13.23354721069336),
-            new leaflet_1.LatLng(52.67307738147864, 13.235006332397463),
-            new leaflet_1.LatLng(52.66882253823937, 13.238890171051027),
-            new leaflet_1.LatLng(52.67376696536968, 13.241722583770754),
-            new leaflet_1.LatLng(52.67404019371207, 13.241035938262941),
-            new leaflet_1.LatLng(52.67822948099083, 13.24230194091797),
-            new leaflet_1.LatLng(52.680402027678376, 13.24182987213135),
-            new leaflet_1.LatLng(52.68185900444268, 13.243567943573),
-            new leaflet_1.LatLng(52.68172891920755, 13.244490623474123)
+            new leaflet_1.LatLng(52.63639, 13.21966),
+            new leaflet_1.LatLng(52.64182, 13.22419),
+            new leaflet_1.LatLng(52.64346, 13.22704),
+            new leaflet_1.LatLng(52.64397, 13.22545),
+            new leaflet_1.LatLng(52.64837, 13.22756),
+            new leaflet_1.LatLng(52.65480, 13.22125),
+            new leaflet_1.LatLng(52.65684, 13.22146),
+            new leaflet_1.LatLng(52.65692, 13.22365),
+            new leaflet_1.LatLng(52.66020, 13.22451),
+            new leaflet_1.LatLng(52.66516, 13.23236),
+            new leaflet_1.LatLng(52.66838, 13.23798),
+            new leaflet_1.LatLng(52.67215, 13.23354),
+            new leaflet_1.LatLng(52.67307, 13.23500),
+            new leaflet_1.LatLng(52.66882, 13.23889),
+            new leaflet_1.LatLng(52.67376, 13.24172),
+            new leaflet_1.LatLng(52.67404, 13.24103),
+            new leaflet_1.LatLng(52.67822, 13.24230),
+            new leaflet_1.LatLng(52.68040, 13.24182),
+            new leaflet_1.LatLng(52.68185, 13.24356),
+            new leaflet_1.LatLng(52.68172, 13.24449)
         ]),
         new WppEdge("e13", n9, n10, [
-            new leaflet_1.LatLng(52.66084521721903, 13.25955390930176),
-            new leaflet_1.LatLng(52.66068903979623, 13.263094425201418),
-            new leaflet_1.LatLng(52.66051984695848, 13.26401710510254),
-            new leaflet_1.LatLng(52.65552185543846, 13.273651599884035)
+            new leaflet_1.LatLng(52.66084, 13.25955),
+            new leaflet_1.LatLng(52.66068, 13.26309),
+            new leaflet_1.LatLng(52.66051, 13.26401),
+            new leaflet_1.LatLng(52.65552, 13.27365)
         ]),
         new WppEdge("e14", n6, n10, [
-            new leaflet_1.LatLng(52.62678533851139, 13.264124393463137),
-            new leaflet_1.LatLng(52.628634835397804, 13.263437747955324),
-            new leaflet_1.LatLng(52.636032041318884, 13.262901306152346),
-            new leaflet_1.LatLng(52.64144891992044, 13.261442184448244),
-            new leaflet_1.LatLng(52.64025101415167, 13.269853591918947),
-            new leaflet_1.LatLng(52.64196973828308, 13.279380798339846),
-            new leaflet_1.LatLng(52.64400087064272, 13.282985687255861),
-            new leaflet_1.LatLng(52.650197845375274, 13.283672332763672),
-            new leaflet_1.LatLng(52.65264514811467, 13.281183242797852),
-            new leaflet_1.LatLng(52.65514437974629, 13.28152656555176)
+            new leaflet_1.LatLng(52.62678, 13.26412),
+            new leaflet_1.LatLng(52.62863, 13.26343),
+            new leaflet_1.LatLng(52.63603, 13.26290),
+            new leaflet_1.LatLng(52.64144, 13.26144),
+            new leaflet_1.LatLng(52.64025, 13.26985),
+            new leaflet_1.LatLng(52.64196, 13.27938),
+            new leaflet_1.LatLng(52.64400, 13.28298),
+            new leaflet_1.LatLng(52.65019, 13.28367),
+            new leaflet_1.LatLng(52.65264, 13.28118),
+            new leaflet_1.LatLng(52.65514, 13.28152)
         ]),
         new WppEdge("e15", n7, n11, [
-            new leaflet_1.LatLng(52.63695218310809, 13.213899826034321),
-            new leaflet_1.LatLng(52.633296511537, 13.214855716502719),
-            new leaflet_1.LatLng(52.621932216754615, 13.213085622984506),
-            new leaflet_1.LatLng(52.616369080772024, 13.204461634479811),
-            new leaflet_1.LatLng(52.60701397642708, 13.200213015257363),
-            new leaflet_1.LatLng(52.59744833612811, 13.204289972721888),
-            new leaflet_1.LatLng(52.59317309673633, 13.212315141625744)
+            new leaflet_1.LatLng(52.63695, 13.21389),
+            new leaflet_1.LatLng(52.63329, 13.21485),
+            new leaflet_1.LatLng(52.62193, 13.21308),
+            new leaflet_1.LatLng(52.61636, 13.20446),
+            new leaflet_1.LatLng(52.60701, 13.20021),
+            new leaflet_1.LatLng(52.59744, 13.20428),
+            new leaflet_1.LatLng(52.59317, 13.21231)
         ]),
         new WppEdge("e16", n11, n3),
         new WppEdge("e17", n8, n9, [
-            new leaflet_1.LatLng(52.681702902114026, 13.24455499649048),
-            new leaflet_1.LatLng(52.681507773418645, 13.245778083801271),
-            new leaflet_1.LatLng(52.67705209767, 13.257869482040407),
-            new leaflet_1.LatLng(52.6755689398141, 13.25956463813782),
-            new leaflet_1.LatLng(52.67555592943465, 13.260219097137453),
-            new leaflet_1.LatLng(52.675120079484934, 13.260358572006227),
-            new leaflet_1.LatLng(52.67536077327836, 13.261452913284304),
-            new leaflet_1.LatLng(52.6691478466926, 13.262214660644533),
-            new leaflet_1.LatLng(52.66443714392834, 13.261871337890627)
+            new leaflet_1.LatLng(52.68170, 13.24455),
+            new leaflet_1.LatLng(52.68150, 13.24577),
+            new leaflet_1.LatLng(52.67705, 13.25786),
+            new leaflet_1.LatLng(52.67556, 13.25956),
+            new leaflet_1.LatLng(52.67555, 13.26021),
+            new leaflet_1.LatLng(52.67512, 13.26035),
+            new leaflet_1.LatLng(52.67536, 13.26145),
+            new leaflet_1.LatLng(52.66914, 13.26221),
+            new leaflet_1.LatLng(52.66443, 13.26187)
         ]),
         new WppEdge("e18", n9, n6, [
-            new leaflet_1.LatLng(52.6575133111675, 13.255949020385744),
-            new leaflet_1.LatLng(52.65553487178351, 13.258094787597658),
-            new leaflet_1.LatLng(52.64147496098585, 13.26152801513672),
-            new leaflet_1.LatLng(52.636162262615215, 13.262858390808107),
-            new leaflet_1.LatLng(52.628712981432436, 13.263416290283205),
-            new leaflet_1.LatLng(52.62683743808515, 13.264102935791017)
+            new leaflet_1.LatLng(52.65751, 13.25594),
+            new leaflet_1.LatLng(52.65553, 13.25809),
+            new leaflet_1.LatLng(52.64147, 13.26152),
+            new leaflet_1.LatLng(52.63616, 13.26285),
+            new leaflet_1.LatLng(52.62871, 13.26341),
+            new leaflet_1.LatLng(52.62683, 13.26410)
         ])
     ]
 };
@@ -280,7 +280,8 @@ function calcDistance(p1, p2, additional) {
 }
 function onMouseClick(e) {
     //map.fitBounds(e.target.getBounds());
-    console.log("click on map:[" + e.latlng.lat + ", " + e.latlng.lng + "]");
+    var latlng = trim(e.latlng);
+    console.log("click on map:[" + latlng.lat + ", " + latlng.lng + "]");
 }
 // initialize map
 var mymap = (0, leaflet_1.map)('map').setView(new leaflet_1.LatLng(52.60681, 13.24372), 12); // base on home node
@@ -437,9 +438,11 @@ function refreshLines() {
     ;
 }
 function onNodeClick(marker) {
-    console.log("click on node:[" + marker.latlng.lat + ", " + marker.latlng.lng + "]");
+    var _a;
+    var latlng = trim(marker.latlng);
+    console.log("click on node:[" + latlng.lat + ", " + latlng.lng + "]");
     var node = nodes.get(this.getElement().getAttribute('title'));
-    var edgeid = currentWaypoint.edges.get(node.id).id;
+    var edgeid = (_a = currentWaypoint.edges.get(node.id)) === null || _a === void 0 ? void 0 : _a.id;
     var update = false;
     if (node.id == currentWaypoint.id && route.length > 0) {
         // reclick current waypoint -> remove it from route
@@ -470,8 +473,12 @@ function onNodeClick(marker) {
         info.update(laenge_1, route, homeWaypoint);
     }
 }
+function trim(latLng) {
+    return new leaflet_1.LatLng(Number.parseFloat(latLng.lat.toFixed(5)), Number.parseFloat(latLng.lng.toFixed(5)));
+}
 function onEdgeClick(edge) {
-    console.log("click on edge:[" + edge.latlng.lat + ", " + edge.latlng.lng + "]");
+    var latlng = trim(edge.latlng);
+    console.log("click on edge:[" + latlng.lat + ", " + latlng.lng + "]");
 }
 try {
     // adding to map, aka Painting
