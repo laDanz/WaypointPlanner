@@ -14,6 +14,12 @@
         <span id="debug"></span>
         <div id="map"></div>
     </div>
+    <script>
+        var exports = {};
+        var require = function() {
+            return L;
+        };
+    </script>
     <script src="wpp.js"></script>
 </body>
 
