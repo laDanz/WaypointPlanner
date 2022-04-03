@@ -4,6 +4,8 @@ function log(s) {
     document.getElementById("debug").textContent = s;
 }
 
+/// classes
+
 class WppNodeOptions {
     title: string;
 }
@@ -46,6 +48,8 @@ class WppEdge {
     line: Polyline;
 }
 
+/// icons
+
 var homeIcon = new Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -78,6 +82,8 @@ var candidateIcon = new Icon({
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
 });
+
+/// inital nodes (to be deleted)
 
 let n0 = new WppNode(
     "n0",
@@ -140,6 +146,8 @@ let n11 = new WppNode(
     "Jagdhaus Spandau",
     new LatLng(52.58545, 13.21137) 
 );
+
+/// initial graph, only helper structure. Containing all edges
 
 let graph = {
     "nodes": [n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11],
@@ -409,6 +417,8 @@ let graph = {
     ]
 };
 
+/// functions
+
 function calcDistance(p1:LatLng, p2:LatLng, additional : LatLng[] = []) {
     let result : number = 0;
     let points : LatLng[] = [];
@@ -425,16 +435,82 @@ function calcDistance(p1:LatLng, p2:LatLng, additional : LatLng[] = []) {
     return result;
 }
 
-function onMouseClick(e) {
+function calculateCandidates() {
+    for (let node of nodes.values()) {
+        node.candidate = false;
+    }
+    for (let edge of currentWaypoint.edges.values()) {
+        if (edge.target.id == currentWaypoint.id) {
+            nodes.get(edge.source.id).candidate = true;
+        }
+        if (edge.source.id == currentWaypoint.id) {
+            nodes.get(edge.target.id).candidate = true;
+        }
+    };
+}
+
+function trim(latLng:LatLng):LatLng{
+    return new LatLng(Number.parseFloat(latLng.lat.toFixed(5)), Number.parseFloat(latLng.lng.toFixed(5)));
+}
+
+function onMapClick(e) {
     //map.fitBounds(e.target.getBounds());
     let latlng:LatLng = trim(e.latlng);
     console.log("click on map:[" + latlng.lat + ", " + latlng.lng + "]");
 }
-// initialize map
+
+function onNodeClick(marker) {
+    let latlng:LatLng = trim(marker.latlng);
+    console.log("click on node:[" + latlng.lat + ", " + latlng.lng + "]");
+    let node : WppNode = nodes.get(this.getElement().getAttribute('title'));
+    let edgeid : string = currentWaypoint.edges.get(node.id)?.id;
+    let update : boolean = false;
+    if (node.id == currentWaypoint.id && route.length > 0) {
+        // reclick current waypoint -> remove it from route
+        edgeid = route.pop();
+        let edge : WppEdge = edges.get(edgeid);
+        if (edge.target.id == currentWaypoint.id) {
+            currentWaypoint = nodes.get(edge.source.id);
+        } else {
+            currentWaypoint = nodes.get(edge.target.id);
+        }
+        update = true;
+    } else if (node.candidate && !route.includes(edgeid)) {
+        // it's a candidate and not yet included -> add to route
+        route.push(edgeid);
+        currentWaypoint = node;
+        update = true;
+    }
+    if (update) {
+        calculateCandidates();
+        refreshIcons();
+        refreshLines();
+        let laenge = 0;
+        route.forEach(function(eid) {
+            laenge += edges.get(eid).laenge();
+        });
+        info.update(laenge, route, homeWaypoint);
+    }
+}
+
+function onEdgeClick(edge) {
+    let latlng:LatLng = trim(edge.latlng);
+    console.log("click on edge:[" + latlng.lat + ", " + latlng.lng + "]");
+}
+
+/// variables
+var nodes : Map<string, WppNode> = new Map<string, WppNode>();
+var edges : Map<string, WppEdge> = new Map<string, WppEdge>();
+var homeWaypoint : WppNode;
+var currentWaypoint : WppNode;
+var route : string[] = [];
+
+
+/// initialize map
 var mymap = map('map').setView(new LatLng(52.60681, 13.24372), 12); // base on home node
 
 mymap.on({
-    click: onMouseClick
+    click: onMapClick
 })
 
 tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -472,17 +548,14 @@ info.onAdd = function(map) {
 
 info.addTo(mymap);
 
-// traverse over graph, preprocessing
-var nodes : Map<string, WppNode> = new Map<string, WppNode>();
+/// traverse over graph, initial preprocessing
 graph["nodes"].forEach(function(node : WppNode) {
     // TODO fail if multiple id
     nodes.set(node.id, node);
     node.additionalOptions.title = node.id;
 });
-var homeWaypoint : WppNode = nodes.get("n0");
-var currentWaypoint : WppNode  = homeWaypoint;
-var route : string[] = [];
-var edges : Map<string, WppEdge> = new Map<string, WppEdge>();
+homeWaypoint = nodes.get("n0");
+currentWaypoint  = homeWaypoint;
 graph["edges"].forEach(function(e:WppEdge) {
     // TODO fail if multiple id
     edges.set(e.id, e);
@@ -497,20 +570,6 @@ graph["edges"].forEach(function(e:WppEdge) {
         e.target.candidate = true;
     }
 });
-
-function calculateCandidates() {
-    for (let node of nodes.values()) {
-        node.candidate = false;
-    }
-    for (let edge of currentWaypoint.edges.values()) {
-        if (edge.target.id == currentWaypoint.id) {
-            nodes.get(edge.source.id).candidate = true;
-        }
-        if (edge.source.id == currentWaypoint.id) {
-            nodes.get(edge.target.id).candidate = true;
-        }
-    };
-}
 
 function refreshIcons() {
     for (let node of nodes.values()) {
@@ -541,49 +600,6 @@ function refreshLines() {
     };
 }
 
-function onNodeClick(marker) {
-    let latlng:LatLng = trim(marker.latlng);
-    console.log("click on node:[" + latlng.lat + ", " + latlng.lng + "]");
-    let node : WppNode = nodes.get(this.getElement().getAttribute('title'));
-    let edgeid : string = currentWaypoint.edges.get(node.id)?.id;
-    let update : boolean = false;
-    if (node.id == currentWaypoint.id && route.length > 0) {
-        // reclick current waypoint -> remove it from route
-        edgeid = route.pop();
-        let edge : WppEdge = edges.get(edgeid);
-        if (edge.target.id == currentWaypoint.id) {
-            currentWaypoint = nodes.get(edge.source.id);
-        } else {
-            currentWaypoint = nodes.get(edge.target.id);
-        }
-        update = true;
-    } else if (node.candidate && !route.includes(edgeid)) {
-        // it's a candidate and not yet included -> add to route
-        route.push(edgeid);
-        currentWaypoint = node;
-        update = true;
-    }
-    if (update) {
-        calculateCandidates();
-        refreshIcons();
-        refreshLines();
-        let laenge = 0;
-        route.forEach(function(eid) {
-            laenge += edges.get(eid).laenge();
-        });
-        info.update(laenge, route, homeWaypoint);
-    }
-}
-
-function trim(latLng:LatLng):LatLng{
-    
-    return new LatLng(Number.parseFloat(latLng.lat.toFixed(5)), Number.parseFloat(latLng.lng.toFixed(5)));
-}
-
-function onEdgeClick(edge) {
-    let latlng:LatLng = trim(edge.latlng);
-    console.log("click on edge:[" + latlng.lat + ", " + latlng.lng + "]");
-}
 // adding to map, aka Painting
 for (let node of nodes.values()) {
     node.marker = marker(node.latLng, node.markerOptions).addTo(mymap)
