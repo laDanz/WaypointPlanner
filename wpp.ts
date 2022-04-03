@@ -1,4 +1,4 @@
-import { Control, DomUtil, Icon, LatLng, map, marker, MarkerOptions, Polyline, polyline, tileLayer } from "leaflet";
+import { Control, DomUtil, Icon, LatLng, map, Marker, marker, MarkerOptions, popup, Polyline, polyline, tileLayer } from "leaflet";
 
 function log(s) {
     document.getElementById("debug").textContent = s;
@@ -27,7 +27,7 @@ class WppNode {
     additionalOptions:WppNodeOptions;
     candidate: boolean;
     edges: Map<string, WppEdge>;
-    marker;
+    marker: Marker;
 }
 class WppEdge {
     constructor(id: string, source:WppNode,target:WppNode,additional?:LatLng[]) {
@@ -76,6 +76,14 @@ var currentIcon = new Icon({
 });
 var candidateIcon = new Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+var newIcon = new Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -453,10 +461,73 @@ function trim(latLng:LatLng):LatLng{
     return new LatLng(Number.parseFloat(latLng.lat.toFixed(5)), Number.parseFloat(latLng.lng.toFixed(5)));
 }
 
+function genRandomNodeId():string{
+    while(true){
+        var id:string = crypto.randomUUID().split("-")[0];
+        var found:boolean =false;
+        for (let node of nodes.values()) {
+            if (node.id == id){
+                found=true;
+                break;
+            }
+        }
+        if(!found){
+            return id;
+        }
+    }
+}
+
+function removeTempNode(tempNode:WppNode) {
+    console.log("entering removeTempNode");
+    // FIXME stupid indicator if popup was just closed, or closed after node save
+    if(tempNode.markerOptions.icon != null){
+        tempNode.marker.remove();
+    }
+}
+
+function saveTempNode(tempNode:WppNode, name: string) {
+    console.log("entering saveTempNode");
+    nodes.set(tempNode.id, tempNode);
+    tempNode.label=name;
+    tempNode.markerOptions.icon=null;
+    tempNode.marker.closePopup();
+    tempNode.marker.bindPopup(tempNode.label);
+    refreshIcons();
+}
+
+interface NewNodeFormElements extends HTMLCollection {
+    newname: HTMLInputElement;
+}
+
 function onMapClick(e) {
     //map.fitBounds(e.target.getBounds());
     let latlng:LatLng = trim(e.latlng);
     console.log("click on map:[" + latlng.lat + ", " + latlng.lng + "]");
+    // place new node icon, open dialoge to create new node
+    var newNode : WppNode = new WppNode(genRandomNodeId(), "Wegpunkt", latlng, {icon: newIcon});
+    var newPopup = popup()
+    .setContent(
+        '<form role="form" id="newNodeForm">'+
+        '<b>Neuer Knoten</b><br><br>'+
+        'Name: <input id="newNodeNameInput" name="newname"><br>'+
+        '<button type="submit">save</button>'+
+        '</form>'
+        )
+    .on('remove', function() {
+        removeTempNode(newNode);
+    });
+    newNode.marker = marker(newNode.latLng, newNode.markerOptions)
+        .addTo(mymap)
+        .bindPopup(newPopup)
+        .openPopup();
+    
+    var form : HTMLFormElement= document.getElementById('newNodeForm') as HTMLFormElement;
+    var elements: NewNodeFormElements = form.elements as NewNodeFormElements;
+    form.onsubmit=function(e){
+        e.preventDefault();
+        saveTempNode(newNode, elements.newname.value);
+    };
+    elements.newname.focus();
 }
 
 function onNodeClick(marker) {
