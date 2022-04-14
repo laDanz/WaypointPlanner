@@ -1,4 +1,4 @@
-import { Control, DomUtil, Icon, LatLng, map, Marker, marker, MarkerOptions, popup, Polyline, polyline, tileLayer } from "leaflet";
+import { Control, DomUtil, Icon, LatLng, map, Draggable, Marker, marker, MarkerOptions, popup, Polyline, polyline, tileLayer } from "leaflet";
 
 function log(s) {
     document.getElementById("debug").textContent = s;
@@ -35,6 +35,7 @@ class WppEdge {
         this.source=source;
         this.target=target;
         this.additional=additional;
+        this.lines=[];
     }
 
     laenge():number{
@@ -45,7 +46,7 @@ class WppEdge {
     source: WppNode;
     target: WppNode;
     additional: LatLng[];
-    line: Polyline;
+    lines: Polyline[];
 }
 
 /// icons
@@ -492,6 +493,8 @@ function saveTempNode(tempNode:WppNode, name: string) {
     tempNode.markerOptions.icon=null;
     tempNode.marker.closePopup();
     tempNode.marker.bindPopup(tempNode.label);
+    tempNode.marker.on('click', onNodeClick);
+    tempNode.marker.getElement().setAttribute('title', tempNode.id);
     refreshIcons();
 }
 
@@ -500,16 +503,25 @@ interface NewNodeFormElements extends HTMLCollection {
 }
 
 function onMapClick(e) {
-    //map.fitBounds(e.target.getBounds());
+    if(e.originalEvent.target.id != "map"){
+        // filter out clicks through transparent info containers
+        return;
+    }
     let latlng:LatLng = trim(e.latlng);
     console.log("click on map:[" + latlng.lat + ", " + latlng.lng + "]");
+    nodeInfo.update(null);
+    if(dragMarker != null){
+        dragMarker.remove();
+        dragMarker = null;
+        return;
+    }
     // place new node icon, open dialoge to create new node
     var newNode : WppNode = new WppNode(genRandomNodeId(), "Wegpunkt", latlng, {icon: newIcon});
     var newPopup = popup()
     .setContent(
         '<form role="form" id="newNodeForm">'+
         '<b>Neuer Knoten</b><br><br>'+
-        'Name: <input id="newNodeNameInput" name="newname"><br>'+
+        'Name: <input id="newNodeNameInput" name="newname" value="Knotenpunkt"><br>'+
         '<button type="submit">save</button>'+
         '</form>'
         )
@@ -536,6 +548,14 @@ function onNodeClick(marker) {
     let node : WppNode = nodes.get(this.getElement().getAttribute('title'));
     let edgeid : string = currentWaypoint.edges.get(node.id)?.id;
     let update : boolean = false;
+    if (addRouteStartNodeId != null){
+        onAddRouteFinished(node.id);
+        return;
+    }
+    if(dragMarker != null){
+        dragMarker.remove();
+        dragMarker = null;
+    }
     if (node.id == currentWaypoint.id && route.length > 0) {
         // reclick current waypoint -> remove it from route
         edgeid = route.pop();
@@ -562,11 +582,70 @@ function onNodeClick(marker) {
         });
         info.update(laenge, route, homeWaypoint);
     }
+    nodeInfo.update(node);
 }
 
-function onEdgeClick(edge) {
-    let latlng:LatLng = trim(edge.latlng);
+function onAddRoute(startNodeId : string){
+    addRouteStartNodeId = startNodeId;
+    document.getElementById('addRouteButton').textContent='select target node!';
+}
+
+function onAddRouteFinished(endNodeId : string){
+    //add route from addRouteStartNodeId -> endNodeId
+    let startNode : WppNode = nodes.get(addRouteStartNodeId);
+    let endNode : WppNode = nodes.get(endNodeId);
+    let newEdge : WppEdge = new WppEdge(
+        genRandomNodeId(),
+        startNode,
+        endNode,
+        []
+    );
+    edges.set(newEdge.id, newEdge);
+    addLinesToEdge(newEdge);
+    startNode.edges.set(endNode.id, newEdge);
+    endNode.edges.set(startNode.id, newEdge);
+    addRouteStartNodeId = null;
+    document.getElementById('addRouteButton').textContent='add route';
+}
+
+function onEdgeClick(_edge) {
+    let latlng:LatLng = trim(_edge.latlng);
     console.log("click on edge:[" + latlng.lat + ", " + latlng.lng + "]");
+    nodeInfo.update(null);
+    if(dragMarker != null){
+        dragMarker.remove();
+        dragMarker = null;
+    }
+    let edge : WppEdge = edges.get(this.getElement().getAttribute('title'));
+    let idx : number = getNewIndex(edge.source.latLng, edge.additional, edge.target.latLng, this);
+    edge.additional.splice(idx, 0, latlng);
+    dragMarker = marker(latlng, {draggable: true}).addTo(mymap);//, node.markerOptions
+    dragMarker.on('drag', function(event){
+        var position = trim(dragMarker.getLatLng());
+        latlng.lat=position.lat;
+        latlng.lng=position.lng;
+        addLinesToEdge(edge);
+    });
+}
+
+function getNewIndex(start : LatLng, addit : LatLng[], end: LatLng, line: Polyline) : number {
+    let one : LatLng = line.getLatLngs()[0] as LatLng;
+    let two : LatLng = line.getLatLngs()[1] as LatLng;
+    let idx : number = null;
+
+    if (one == start || two == start){
+        idx = 0;
+    }
+    if (one == end || two == end){
+        idx = addit.length;
+    }
+    addit.forEach((ll,idx_)=>{
+        if(idx == null && (one == ll || two == ll)){
+            idx = idx_+1;
+        }
+    });
+
+    return idx;
 }
 
 /// variables
@@ -575,6 +654,8 @@ var edges : Map<string, WppEdge> = new Map<string, WppEdge>();
 var homeWaypoint : WppNode;
 var currentWaypoint : WppNode;
 var route : string[] = [];
+var addRouteStartNodeId : string = null;
+var dragMarker : Marker = null;
 
 
 /// initialize map
@@ -619,6 +700,26 @@ info.onAdd = function(map) {
 
 info.addTo(mymap);
 
+const NodeInfoControlClass = Control.extend({
+    // method that we will use to update the control based on feature properties passed
+    update : function(node:WppNode) {
+        if(node == null){
+            this._div.innerHTML = '';
+            return ;
+        }
+        this._div.innerHTML = '<h4>'+node.label+'</h4>' +
+            '<button id="addRouteButton" onclick="onAddRoute(\''+node.id+'\')">add route</button>';
+    }
+});
+var nodeInfo = new NodeInfoControlClass();
+nodeInfo.onAdd = function(map) {
+    this._div = DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+nodeInfo.addTo(mymap);
+
 /// traverse over graph, initial preprocessing
 graph["nodes"].forEach(function(node : WppNode) {
     // TODO fail if multiple id
@@ -659,27 +760,39 @@ function refreshIcons() {
 function refreshLines() {
     for (let edge of edges.values()) {
         if (route.includes(edge.id)) {
-            edge.line.setStyle({
+            edge.lines.forEach(l=>l.setStyle({
                 color: 'magenta'
-            });
-            edge.line.bringToFront();
+            }));
+            edge.lines.forEach(l=>l.bringToFront());
         } else {
-            edge.line.setStyle({
+            edge.lines.forEach(l=>l.setStyle({
                 color: 'purple'
-            });
+            }));
         }
     };
 }
 
 // adding to map, aka Painting
 for (let node of nodes.values()) {
+    var newPopup = popup()
+    .setContent(node.label);
     node.marker = marker(node.latLng, node.markerOptions).addTo(mymap)
-        .bindPopup(node.label)
+        .bindPopup(newPopup)
         .on('click', onNodeClick);
     node.marker.getElement().setAttribute('title', node.id);
 };
 refreshIcons();
 for (let edge of edges.values()) {
+    addLinesToEdge(edge);
+};
+
+function addLinesToEdge(edge : WppEdge){
+    if(edge.lines != null) {
+        while(edge.lines.length>0){
+            let line : Polyline = edge.lines.pop();
+            line.remove();
+        }
+    }
     let pline : LatLng[] = [];
     pline.push(edge.source.latLng);
     if (edge.additional) {
@@ -688,9 +801,13 @@ for (let edge of edges.values()) {
         });
     }
     pline.push(edge.target.latLng);
-    edge.line = polyline(pline, {
+    while(pline.length>1){
+        let line : Polyline = polyline(pline.slice(0, 2), {
             color: 'purple'
         }).addTo(mymap)
         .on('click', onEdgeClick);
-    edge.line.getElement().setAttribute('title', edge.id);
-};
+        line.getElement().setAttribute('title', edge.id);
+        edge.lines.push(line);
+        pline.shift();
+    }
+}
