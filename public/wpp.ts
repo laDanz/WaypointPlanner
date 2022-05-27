@@ -185,6 +185,7 @@ function onMapClick(e) {
     if(dragMarker != null){
         dragMarker.remove();
         dragMarker = null;
+        saveCurrentNodes();
         return;
     }
     // place new node icon, open dialoge to create new node
@@ -279,6 +280,7 @@ function onAddRouteFinished(endNodeId : string){
     addRouteStartNodeId = null;
     document.getElementById('addRouteButton').textContent='add route';
     calculateCandidates();
+    saveCurrentNodes();
 }
 
 function onEdgeClick(_edge) {
