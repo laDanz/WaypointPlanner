@@ -280,6 +280,7 @@ function onAddRouteFinished(endNodeId : string){
     addRouteStartNodeId = null;
     document.getElementById('addRouteButton').textContent='add route';
     calculateCandidates();
+    refreshIcons();
     saveCurrentNodes();
 }
 
@@ -303,19 +304,23 @@ function onEdgeClick(_edge) {
     });
 }
 
+function equals(left : LatLng, right : LatLng) : boolean{
+    return left === right || (left.lat == right.lat && left.lng == right.lng);
+}
+
 function getNewIndex(start : LatLng, addit : LatLng[], end: LatLng, line: Polyline) : number {
     let one : LatLng = line.getLatLngs()[0] as LatLng;
     let two : LatLng = line.getLatLngs()[1] as LatLng;
     let idx : number = null;
 
-    if (one == start || two == start){
+    if (equals(one, start) || equals(two, start)){
         idx = 0;
     }
-    if (one == end || two == end){
+    if (equals(one, end) || equals(two,end)){
         idx = addit.length;
     }
     addit.forEach((ll,idx_)=>{
-        if(idx == null && (one == ll || two == ll)){
+        if(idx == null && (equals(one, ll) || equals(two, ll))){
             idx = idx_+1;
         }
     });
@@ -380,7 +385,7 @@ function loadNodes(){
             // dirty end
         }
     }
-
+    calculateCandidates();
     refreshIcons();
 }
 
