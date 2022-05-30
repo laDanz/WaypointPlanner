@@ -182,9 +182,9 @@ function onMapClick(e) {
     let latlng:LatLng = trim(e.latlng);
     console.log("click on map:[" + latlng.lat + ", " + latlng.lng + "]");
     nodeInfo.update(null);
-    if(dragMarker != null){
-        dragMarker.remove();
-        dragMarker = null;
+    if(dragMarker.length > 0){
+        dragMarker.forEach(m=>m.remove());
+        dragMarker = [];
         saveCurrentNodes();
         return;
     }
@@ -225,9 +225,9 @@ function onNodeClick(marker) {
         onAddRouteFinished(node.id);
         return;
     }
-    if(dragMarker != null){
-        dragMarker.remove();
-        dragMarker = null;
+    if(dragMarker.length > 0){
+        dragMarker.forEach(m=>m.remove());
+        dragMarker = [];
     }
     if (node.id == currentWaypoint.id && route.length > 0) {
         // reclick current waypoint -> remove it from route
@@ -288,19 +288,29 @@ function onEdgeClick(_edge) {
     let latlng:LatLng = trim(_edge.latlng);
     console.log("click on edge:[" + latlng.lat + ", " + latlng.lng + "]");
     nodeInfo.update(null);
-    if(dragMarker != null){
-        dragMarker.remove();
-        dragMarker = null;
+    if(dragMarker.length > 0){
+        dragMarker.forEach(m=>m.remove());
+        dragMarker = [];
     }
     let edge : WppEdge = edges.get(this.getElement().getAttribute('title'));
     let idx : number = getNewIndex(edge.source.latLng, edge.additional, edge.target.latLng, this);
     edge.additional.splice(idx, 0, latlng);
-    dragMarker = marker(latlng, {draggable: true}).addTo(mymap);//, node.markerOptions
-    dragMarker.on('drag', function(event){
-        var position = trim(dragMarker.getLatLng());
-        latlng.lat=position.lat;
-        latlng.lng=position.lng;
-        addLinesToEdge(edge);
+    edge.additional.forEach((e, arrIdx)=>{
+        dragMarker.push(
+            marker(e, {draggable: true, icon: newIcon})
+            .addTo(mymap)
+            .on('drag', function(event){
+                var position = trim(this.getLatLng());
+                e.lat=position.lat;
+                e.lng=position.lng;
+                addLinesToEdge(edge);
+            })
+            .on('click', function(event){
+                edge.additional.splice(arrIdx, 1); // aka 'remove'
+                this.remove();
+                addLinesToEdge(edge);
+            })
+        );
     });
 }
 
@@ -425,7 +435,7 @@ var homeWaypoint : WppNode = null;
 var currentWaypoint : WppNode = null;
 var route : string[] = [];
 var addRouteStartNodeId : string = null;
-var dragMarker : Marker = null;
+var dragMarker : Marker[] = [];
 
 
 /// initialize map
