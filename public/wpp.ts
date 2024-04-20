@@ -130,7 +130,7 @@ function trim(latLng:LatLng):LatLng{
 
 function genRandomNodeId():string{
     while(true){
-        var id:string = crypto.randomUUID().split("-")[0];
+        var id:string = (Math.random() + 1).toString(36).substring(2);
         var found:boolean =false;
         for (let node of nodes.values()) {
             if (node.id == id){
